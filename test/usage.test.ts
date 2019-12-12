@@ -1,5 +1,5 @@
-import {Errors, JsonTemplateError, JsonType, Template, templateItems, TypedHandler, typesafe} from '..';
-import fetch, {Response} from 'node-fetch';
+import { CodedError, Errors, JsonTemplateError, JsonType, Template, templateItems, TypedHandler, typesafe } from '..';
+import fetch, { Response } from 'node-fetch';
 import express = require('express');
 import http = require('http');
 
@@ -7,17 +7,16 @@ const PORT = 13000; // configure to fit into your own environment
 
 const {Str, Num, Bool, True, False, Null, List, Dict, Union, Rec, Partial, Optional} = templateItems;
 
-// noinspection JSUnusedLocalSymbols
 const errorHandler: express.ErrorRequestHandler = (error, _req, res, _next) => {
     res.status(400);
     res.json(error instanceof JsonTemplateError ? error.details : error);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function execute<Tpl extends Template>(handler: TypedHandler<JsonType<Tpl>>, template: Tpl, value: any): Promise<Response> {
+async function execute<Tpl extends Template>(handler: TypedHandler<JsonType<Tpl>, JsonType<Tpl>>, template: Tpl, value: any): Promise<Response> {
     const app = express();
     app.use(express.json());
-    app.post('/', typesafe(handler, template));
+    app.post('/', typesafe({handler, input: template, output: template}));
     app.use(errorHandler);
     const srv = await new Promise<http.Server>((ok) => {
         const srv = app.listen(PORT, () => ok(srv));
@@ -31,10 +30,7 @@ async function execute<Tpl extends Template>(handler: TypedHandler<JsonType<Tpl>
     return res;
 }
 
-const echoHandler: TypedHandler<unknown> = (req, res) => {
-    res.send(JSON.stringify(req.body));
-    return Promise.resolve();
-};
+const echoHandler = <T>(): TypedHandler<T, T> => (req) => req.body;
 
 function matchErrors(err1: Errors, err2: Errors): void {
     expect(new Set(err1.missing)).toEqual(new Set(err2.missing));
@@ -43,7 +39,7 @@ function matchErrors(err1: Errors, err2: Errors): void {
 }
 
 describe('Basic typesafe handler', () => {
-    const handler: TypedHandler<{ value: string }> = echoHandler;
+    const handler = echoHandler<{ value: string }>();
     const template = Rec('simple', {value: Str});
     it('should echo the single-field body', async () => {
         const value = {value: 'test'};
@@ -62,8 +58,8 @@ describe('Basic typesafe handler', () => {
 describe('Typesafe handler', () => {
 
     describe('with const types', () => {
-        const value = {num: 0, str: '1'} as {num: 0; str: '1'};
-        const handler: TypedHandler<typeof value> = echoHandler;
+        const value = {num: 0, str: '1'} as { num: 0; str: '1' };
+        const handler = echoHandler<typeof value>();
         const template = Rec('const types', value);
         it('should echo the valid value', async () => {
             const res = await execute(handler, template, value);
@@ -84,7 +80,7 @@ describe('Typesafe handler', () => {
     });
 
     describe('with nullable types', () => {
-        const handler: TypedHandler<{ str: string | null; num: number | null }> = echoHandler;
+        const handler = echoHandler<{ str: string | null; num: number | null }>();
         const template = Rec('nullable', {str: Union(Str, Null), num: Union(Num, null)});
         it('should echo the inhabited value', async () => {
             const value = {num: 1, str: '2'};
@@ -107,7 +103,7 @@ describe('Typesafe handler', () => {
                 Rec('something', {exists: True, value: Str})
             )
         });
-        const handler: TypedHandler<JsonType<typeof template>> = echoHandler;
+        const handler = echoHandler<JsonType<typeof template>>();
         const header = {name: 'name', format: 'format'};
         const correctValues: Array<JsonType<typeof template>> = [{
             header: header,
@@ -167,7 +163,7 @@ describe('Typesafe handler', () => {
 
     describe('with partial type', () => {
         const template = Partial('pair', {name: Str, value: Str});
-        const handler: TypedHandler<JsonType<typeof template>> = echoHandler;
+        const handler = echoHandler<JsonType<typeof template>>();
         const correctValues: Array<JsonType<typeof template>> = [{}, {name: 'name'}, {value: 'value'}, {
             name: 'name',
             value: 'value'
@@ -203,7 +199,7 @@ describe('Typesafe handler', () => {
 
     describe('with optional fields', () => {
         const template = Rec('pair', {name: Str, value: Optional(Str)});
-        const handler: TypedHandler<JsonType<typeof template>> = echoHandler;
+        const handler = echoHandler<JsonType<typeof template>>();
         const correctValues: Array<JsonType<typeof template>> = [{name: 'name'}, {name: 'name', value: 'value'}];
         it('should echo valid values', async () => {
             for (const value of correctValues) {
@@ -236,7 +232,7 @@ describe('Typesafe handler', () => {
 
     describe('with dictionary type', () => {
         const template = Dict(Str);
-        const handler: TypedHandler<JsonType<typeof template>> = echoHandler;
+        const handler = echoHandler<JsonType<typeof template>>();
         const correctValues: Array<JsonType<typeof template>> = [{name: 'name'}, {name: 'name', value: 'value'}];
         it('should echo valid values', async () => {
             for (const value of correctValues) {
@@ -262,9 +258,9 @@ describe('Typesafe handler', () => {
         it('should return customized error', async () => {
             const app = express();
             app.use(express.json());
-            app.post('/', typesafe(echoHandler, (err, _req, _res, next) => {
-                next(err.details.mismatch && err.details.mismatch[0].path);
-            }, Dict(Str)));
+            app.post('/', typesafe({handler: echoHandler<{[index: string]: string}>(), onInputError: (err) => {
+                throw new CodedError(400, JSON.stringify(err.details.mismatch ? err.details.mismatch[0].path : ''));
+            }, input: Dict(Str)}));
             app.use(errorHandler);
             const srv = await new Promise<http.Server>((ok) => {
                 const srv = app.listen(PORT, () => ok(srv));
@@ -282,9 +278,10 @@ describe('Typesafe handler', () => {
 });
 
 describe('Wrapper around typed handler', () => {
-    it('should have the immutable template property', () => {
+    it('should have the immutable template properties', () => {
         const template = Dict(Rec('inner', {name: Str, value: Optional(Str)}));
-        const wrapper = typesafe(echoHandler, template);
-        expect(wrapper.template).toBe(template);
+        const wrapper = typesafe({handler: echoHandler<{[index: string]: {name: string; value?: string}}>(), input: template, output: template});
+        expect(wrapper.input).toBe(template);
+        expect(wrapper.output).toBe(template);
     });
 });

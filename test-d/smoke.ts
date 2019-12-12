@@ -1,5 +1,5 @@
-import {typesafe, typesafeSync} from '../';
+import {typesafe} from '../';
 
 typesafe();
-typesafeSync<null>(() => {}, {});
-typesafeSync(() => {}, {});
+typesafe<null, null>({handler: () => {}, input: {}});
+typesafe({handler: () => {}, input: {}});

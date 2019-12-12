@@ -2,19 +2,14 @@ import {JsonType, templateItems, TypedHandler, typesafe} from '..';
 
 const {Str, Num, Bool, True, False, Null, List, Rec, Partial, Optional} = templateItems;
 
-const echoHandler = <T>(): TypedHandler<T> => (req, res): Promise<void> => {
-    res.send(JSON.stringify(req.body));
-    return Promise.resolve();
-};
+const echoHandler = <T>(): TypedHandler<T, T> => (req): T => req.body;
 
-typesafe(echoHandler<null>(), Str);
-
-typesafe(echoHandler<string>(), Null);
-
-typesafe(echoHandler<true>(), False);
-typesafe(echoHandler<true>(), Bool);
+typesafe({ handler: echoHandler<null>(), input: Str, output: Str});
+typesafe({ handler: echoHandler<string>(), input: Null, output: Null});
+typesafe({ handler: echoHandler<true>(), input: False, output: False});
+typesafe({ handler: echoHandler<true>(), input: Bool, output: Bool});
 // this should _not_ generate error!
-typesafe(echoHandler<true>(), True);
+typesafe({ handler: echoHandler<true>(), input: True, output: True});
 
 const Record = Rec('Record', {
     string: Str,
@@ -28,13 +23,14 @@ const Record = Rec('Record', {
 type Record = JsonType<typeof Record>;
 
 // this should _not_ generate error (handler may very well ignore the fields on template!)
-typesafe(echoHandler<{}>(), Record);
+typesafe({ handler: echoHandler<{}>(), input: Record, output: Rec('empty', {})});
 
-typesafe(echoHandler<{ string: number }>(), Record);
-typesafe(echoHandler<{ [index: string]: string }>(), Record);
-typesafe(echoHandler<{ string: string; number: string }>(), Record);
-typesafe(echoHandler<Record & { subobj: { string: string; number: number } }>(), Record);
-typesafe(echoHandler<Record & { opt: string }>(), Record);
+typesafe({ handler: echoHandler<{ string: number }>(), input: Record, output: Record});
 
-typesafe(echoHandler<string[]>(), List(Num));
-typesafe(echoHandler<object[]>(), List(Num));
+typesafe({ handler: echoHandler<{ [index: string]: string }>(), input: Record, output: Record});
+typesafe({ handler: echoHandler<{ string: string; number: string }>(), input: Record, output: Record});
+typesafe({ handler: echoHandler<Record & { subobj: { string: string; number: number } }>(), input: Record, output: Record});
+typesafe({ handler: echoHandler<Record & { opt: string }>(), input: Record, output: Record});
+
+typesafe({ handler: echoHandler<string[]>(), input: List(Num), output: List(Num)});
+typesafe({ handler: echoHandler<object[]>(), input: List(Num), output: List(Num)});

@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Incorrectly used typesafe wrapper should raise appropriate type errors 1`] = `
+Set {
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 7,
+    "message": "Type 'TypedHandler<null, null>' is not assignable to type 'TypedHandler<string, string>'.
+  Type 'string' is not assignable to type 'null'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 8,
+    "message": "Type 'TypedHandler<string, string>' is not assignable to type 'TypedHandler<null, null>'.
+  Type 'null' is not assignable to type 'string'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 9,
+    "message": "Type 'TypedHandler<true, true>' is not assignable to type 'TypedHandler<false, false>'.
+  Type 'false' is not assignable to type 'true'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 10,
+    "message": "Type 'TypedHandler<true, true>' is not assignable to type 'TypedHandler<boolean, boolean>'.
+  Type 'boolean' is not assignable to type 'true'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 28,
+    "message": "Type 'TypedHandler<{ string: number; }, { string: number; }>' is not assignable to type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }, { opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ ...; }>; }>'.
+  Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ string: number; }'.
+    Types of property 'string' are incompatible.
+      Type 'string' is not assignable to type 'number'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 30,
+    "message": "Type 'TypedHandler<{ [index: string]: string; }, { [index: string]: string; }>' is not assignable to type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }, { opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ ...; }>; }>'.
+  Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ [index: string]: string; }'.
+    Index signature is missing in type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 31,
+    "message": "Type 'TypedHandler<{ string: string; number: string; }, { string: string; number: string; }>' is not assignable to type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }, { opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ ...; }>; }>'.
+  Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ string: string; number: string; }'.
+    Types of property 'number' are incompatible.
+      Type 'number' is not assignable to type 'string'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 32,
+    "message": "Type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; } & { subobj: { string: string; number: number; }; }, { opt?: string | undefined; } & { ...; } & { ...; }>' is not assignable to type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }, { opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ ...; }>; }>'.
+  Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; } & { subobj: { string: string; number: number; }; }'.
+    Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ subobj: { string: string; number: number; }; }'.
+      Types of property 'subobj' are incompatible.
+        Type 'Partial<{ [index: string]: JsonItem; }>' is missing the following properties from type '{ string: string; number: number; }': string, number",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 33,
+    "message": "Type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; } & { opt: string; }, { opt?: string | undefined; } & { string: string; number: number; subobj: Partial<...>; } & { ...; }>' is not assignable to type 'TypedHandler<{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }, { opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ ...; }>; }>'.
+  Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; } & { opt: string; }'.
+    Type '{ opt?: string | undefined; } & { string: string; number: number; subobj: Partial<{ [index: string]: JsonItem; }>; }' is not assignable to type '{ opt: string; }'.
+      Types of property 'opt' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string'.
+          Type 'undefined' is not assignable to type 'string'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 35,
+    "message": "Type 'TypedHandler<string[], string[]>' is not assignable to type 'TypedHandler<number[], number[]>'.
+  Type 'number[]' is not assignable to type 'string[]'.
+    Type 'number' is not assignable to type 'string'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 36,
+    "message": "Type 'TypedHandler<object[], object[]>' is not assignable to type 'TypedHandler<number[], number[]>'.
+  Type 'number[]' is not assignable to type 'object[]'.
+    Type 'number' is not assignable to type 'object'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 0,
+    "fileName": "$ROOT/test-d/smoke.ts",
+    "line": 3,
+    "message": "Expected 1 arguments, but got 0.",
+    "severity": "error",
+  },
+  Object {
+    "column": 22,
+    "fileName": "$ROOT/test-d/smoke.ts",
+    "line": 4,
+    "message": "Type '() => void' is not assignable to type 'TypedHandler<null, null>'.
+  Type 'void' is not assignable to type 'null'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 41,
+    "fileName": "$ROOT/test-d/smoke.ts",
+    "line": 4,
+    "message": "Type '{}' is not assignable to type 'null'.",
+    "severity": "error",
+  },
+  Object {
+    "column": 29,
+    "fileName": "$ROOT/test-d/smoke.ts",
+    "line": 5,
+    "message": "Type '{}' is not assignable to type 'TemplateItemOrConst<JsonItem>'.
+  Type '{}' is missing the following properties from type 'TemplateItem<JsonItem>': __marker, check",
+    "severity": "error",
+  },
+}
+`;
