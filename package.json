@@ -1,0 +1,41 @@
+{
+  "name": "express-typesafe-json-io",
+  "version": "0.0.1",
+  "description": "Typesafe JSON requests and responses for Express, checked both on compile-time and run-time",
+  "main": "dist/index.js",
+  "repository": "https://github.com/Cerberuser/express-typesafe-json-io.git",
+  "author": "Cerberuser <mail+dev@cerbe.ru>",
+  "license": "MIT",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [
+    "express",
+    "typesafe",
+    "type checking"
+  ],
+  "bugs": {
+    "url": "https://github.com/Cerberuser/express-typesafe-json-body/issues"
+  },
+  "homepage": "https://github.com/Cerberuser/express-typesafe-json-body#readme",
+  "devDependencies": {
+    "@types/express": "4.16.0",
+    "@types/jest": "24.0.22",
+    "@types/node-fetch": "2.5.3",
+    "@typescript-eslint/eslint-plugin": "2.6.1",
+    "@typescript-eslint/parser": "2.6.1",
+    "eslint": "6.6.0",
+    "express": "4.16.0",
+    "jest": "24.9.0",
+    "node-fetch": "2.6.0",
+    "ts-jest": "24.1.0",
+    "ts30": "npm:typescript@3.0.1",
+    "tsd": "0.10.0",
+    "typescript": "3.7.2"
+  },
+  "peerDependencies": {
+    "express": "^4.16.0"
+  }
+}
