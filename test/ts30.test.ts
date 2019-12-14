@@ -15,7 +15,10 @@ const message = (msg: string | ts.DiagnosticMessageChain): string => {
 
 describe('Typesafe template', () => {
     it('should be handled correctly by TS 3.0', () => {
-        const prog = ts.createProgram(['test/usage.test.ts', 'node_modules/@types/jest/index.d.ts'], {lib: ['lib.es6.d.ts']});
+        const prog = ts.createProgram(
+            ['test/usage.test.ts', 'node_modules/@types/jest/index.d.ts'],
+            {lib: ['lib.es2015.d.ts'], strict: true}
+        );
         const diags = ts.getPreEmitDiagnostics(prog);
         try {
             expect(diags.length).toBe(0);

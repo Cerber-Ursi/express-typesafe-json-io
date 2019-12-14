@@ -29,7 +29,7 @@ declare type OptionalItem<T extends JsonItem> = TemplateItemOrConst<T> & {
 export declare type Template = TemplateItemOrConst<JsonItem>;
 export declare type JsonType<Tpl> = Tpl extends TemplateItem<infer Inner> ? Inner : Tpl;
 declare type ListInner<T extends TemplateItem<JsonItem>> = T extends TemplateItem<infer Inner> ? Inner : never;
-declare type UnionInner<T extends Array<TemplateItemOrConst<JsonItem>>> = T extends Array<TemplateItemOrConst<infer U>> ? U : never;
+declare type UnionInner<T extends TemplateItemOrConst<JsonItem>> = T extends TemplateItem<infer U> ? U : T;
 export declare function validateElement(item: JsonItem, tpl: TemplateItemOrConst<JsonItem>, errors?: Errors | null, key?: string): Errors | null;
 export declare const templateItems: {
     Str: TemplateItem<string>;
@@ -42,7 +42,7 @@ export declare const templateItems: {
     Dict: <Inner extends JsonItem>(inner: TemplateItemOrConst<Inner>) => TemplateItem<{
         [index: string]: Inner;
     }>;
-    Union: <T_1 extends TemplateItemOrConst<JsonItem>[]>(...inner: T_1) => TemplateItem<UnionInner<T_1>>;
+    Union: <T_1 extends TemplateItemOrConst<JsonItem>[]>(...inner: T_1) => TemplateItem<UnionInner<T_1[number]>>;
     Rec: <K extends string | number | symbol, T_2 extends { [Key in K]: string | number | boolean | void | TemplateItem<JsonItem> | (TemplateItem<JsonItem> & {
         __optMarker: typeof optMarker;
     }) | (string & {

@@ -11,22 +11,25 @@ function routeError(err, res, next) {
         next(err);
     }
 }
+function handleValidationError(errors, cb, req, res, next) {
+    const templateError = new error_1.JsonTemplateError(errors);
+    if (cb) {
+        try {
+            cb(templateError, req, res, next);
+        }
+        catch (err) {
+            routeError(err, res, next);
+        }
+    }
+    else {
+        next(templateError);
+    }
+}
 exports.typesafe = (opts) => {
     const value = (req, res, next) => {
         const errors = template_1.validateElement(req.body, opts.input);
         if (errors) {
-            const templateError = new error_1.JsonTemplateError(errors);
-            if (opts.onInputError) {
-                try {
-                    opts.onInputError(templateError, req, res, next);
-                }
-                catch (err) {
-                    routeError(err, res, next);
-                }
-            }
-            else {
-                next(templateError);
-            }
+            handleValidationError(errors, opts.onInputError, req, res, next);
         }
         else {
             Promise.resolve(opts.handler(req))
@@ -34,18 +37,7 @@ exports.typesafe = (opts) => {
                 if (opts.output) {
                     const errors = template_1.validateElement(JSON.parse(JSON.stringify(value)), opts.output);
                     if (errors) {
-                        const templateError = new error_1.JsonTemplateError(errors);
-                        if (opts.onOutputError) {
-                            try {
-                                opts.onOutputError(templateError, req, res, next);
-                            }
-                            catch (err) {
-                                routeError(err, res, next);
-                            }
-                        }
-                        else {
-                            next(templateError);
-                        }
+                        handleValidationError(errors, opts.onOutputError, req, res, next);
                         return;
                     }
                 }

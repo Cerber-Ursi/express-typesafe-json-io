@@ -30,7 +30,7 @@ async function execute<Tpl extends Template>(handler: TypedHandler<JsonType<Tpl>
     return res;
 }
 
-const echoHandler = <T>(): TypedHandler<T, T> => (req) => req.body;
+const echoHandler = <T>(): TypedHandler<T, T> => (req): T => req.body;
 
 function matchErrors(err1: Errors, err2: Errors): void {
     expect(new Set(err1.missing)).toEqual(new Set(err2.missing));
@@ -273,6 +273,14 @@ describe('Typesafe handler', () => {
             srv.close();
             expect(res.status).toBe(400);
             await expect(res.json()).resolves.toEqual(['value']);
+        });
+    });
+
+    describe('with fixed output type', () => {
+        it('should error on the output type mismatch', () => {
+            const app = express();
+            app.use(express.json());
+            app.post('/', typesafe({handler: (req) => req.body as unknown as number, input: Str, output: Num}));
         });
     });
 });

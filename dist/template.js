@@ -54,13 +54,12 @@ const List = (inner) => {
         return errors
             .map((err, id) => ({ err, id: id.toString() }))
             .filter(({ err }) => err !== null)
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            .map(({ err, id }) => ({ err: err, id }))
             // TODO tell TypeScript that err is guaranteed not to be null
             .reduce(({ extra, missing, mismatch }, { err, id }) => ({
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             extra: extra.concat((err.extra || []).map(path => [id].concat(path))),
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             missing: missing.concat((err.missing || []).map(path => [id].concat(path))),
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             mismatch: mismatch.concat((err.mismatch || []).map(({ expected, actual, path }) => ({
                 expected, actual, path: [id].concat(path)
             })))

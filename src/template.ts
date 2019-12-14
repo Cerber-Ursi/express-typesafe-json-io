@@ -93,24 +93,23 @@ const List = <T extends TemplateItem<JsonItem>>(
         return errors
             .map((err, id) => ({err, id: id.toString()}))
             .filter(({err}) => err !== null)
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            .map(({err, id}) => ({err: err!, id}))
             // TODO tell TypeScript that err is guaranteed not to be null
             .reduce<Required<Errors>>(({extra, missing, mismatch}, {err, id}) => ({
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                extra: extra.concat((err!.extra || []).map(path => [id].concat(path))),
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                missing: missing.concat((err!.missing || []).map(path => [id].concat(path))),
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                mismatch: mismatch.concat((err!.mismatch || []).map(({expected, actual, path}) => ({
+                extra: extra.concat((err.extra || []).map(path => [id].concat(path))),
+                missing: missing.concat((err.missing || []).map(path => [id].concat(path))),
+                mismatch: mismatch.concat((err.mismatch || []).map(({expected, actual, path}) => ({
                     expected, actual, path: [id].concat(path)
                 })))
             }), {extra: [], missing: [], mismatch: []});
     });
 };
 
-type UnionInner<T extends Array<TemplateItemOrConst<JsonItem>>> = T extends Array<TemplateItemOrConst<infer U>> ? U : never;
+type UnionInner<T extends TemplateItemOrConst<JsonItem>> = T extends TemplateItem<infer U> ? U : T;
 const Union = <T extends Array<TemplateItemOrConst<JsonItem>>>(
     ...inner: T
-): TemplateItem<UnionInner<T>> => {
+): TemplateItem<UnionInner<T[number]>> => {
     if (inner.length === 0) {
         throw new Error('Empty union is equal to never type');
     }
