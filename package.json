@@ -1,6 +1,6 @@
 {
   "name": "express-typesafe-json-io",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Typesafe JSON requests and responses for Express, checked both on compile-time and run-time",
   "main": "dist/index.js",
   "repository": "https://github.com/Cerberuser/express-typesafe-json-io.git",
