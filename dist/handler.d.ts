@@ -1,5 +1,9 @@
 import { JsonType, Template } from './template';
 import { ErrorHandler, RequestHandlerWithTemplates, TypedHandler } from './type-patches';
+export declare enum Kind {
+    Handler = 0,
+    Middleware = 1
+}
 /**
  * Input for `typesafe` function.
  *
@@ -19,6 +23,10 @@ export interface TypesafeHandlerOptions<InTpl extends Template, OutTpl extends T
     handler: TypedHandler<JsonType<InTpl>, JsonType<OutTpl>>;
     onInputError?: ErrorHandler;
     onOutputError?: ErrorHandler;
+    meta?: {
+        [index: string]: unknown;
+    };
 }
 export declare const typesafe: <InTpl extends Template, OutTpl extends Template>(opts: TypesafeHandlerOptions<InTpl, OutTpl>) => RequestHandlerWithTemplates<InTpl, OutTpl>;
+export declare const typesafeTransform: <InTpl extends Template, OutTpl extends Template>(opts: TypesafeHandlerOptions<InTpl, OutTpl>) => RequestHandlerWithTemplates<InTpl, OutTpl>;
 //# sourceMappingURL=handler.d.ts.map

@@ -8,4 +8,5 @@ exports.templateItems = template_1.templateItems;
 exports.validateElement = template_1.validateElement;
 var handler_1 = require("./handler");
 exports.typesafe = handler_1.typesafe;
+exports.typesafeTransform = handler_1.typesafeTransform;
 //# sourceMappingURL=index.js.map

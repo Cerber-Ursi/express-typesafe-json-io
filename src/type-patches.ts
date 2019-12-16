@@ -1,6 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { JsonTemplateError } from './error';
 import { Template } from './template';
+import { Kind } from './handler';
 
 type Patched<Base, Patch> = Pick<Base, Exclude<keyof Base, keyof Patch>> & Patch;
 export type TypedRequest<B = never> = Patched<Request, { body: B }>;
@@ -10,5 +11,6 @@ export type ErrorHandler<RetEr = void> = (err: JsonTemplateError, req: TypedRequ
 
 export interface RequestHandlerWithTemplates<InTpl extends Template, OutTpl extends Template> extends RequestHandler {
     input: InTpl;
-    output: OutTpl;
+    output?: OutTpl;
+    meta?: {kind: Kind; [index: string]: unknown};
 }

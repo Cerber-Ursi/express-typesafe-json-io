@@ -1,6 +1,6 @@
 import {JsonType, templateItems, TypedHandler, typesafe} from '..';
 
-const {Str, Num, Bool, True, False, Null, List, Rec, Partial, Optional} = templateItems;
+const {Str, Num, Bool, True, False, Null, List, Rec, Partial, Optional, Unknown} = templateItems;
 
 const echoHandler = <T>(): TypedHandler<T, T> => (req): T => req.body;
 
@@ -34,3 +34,5 @@ typesafe({ handler: echoHandler<Record & { opt: string }>(), input: Record, outp
 
 typesafe({ handler: echoHandler<string[]>(), input: List(Num), output: List(Num)});
 typesafe({ handler: echoHandler<object[]>(), input: List(Num), output: List(Num)});
+
+typesafe({ handler: echoHandler<string>(), input: Unknown, output: Unknown });

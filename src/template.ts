@@ -78,6 +78,10 @@ const Null = null;
 // It can be emulated using Union(true, false), but we'll provide the explicit validator for convenience
 const Bool: TemplateItem<boolean> = templateItem(simpleItem('boolean', (item) => typeof item === 'boolean'));
 
+// `Unknown` types always validates, but must be checked afterwards, since it can be any JSON at all
+// (it's not the TypeScript's `unknown`, however, since JSON itself is limited)
+const Unknown: TemplateItem<JsonItem> = templateItem(() => null);
+
 type ListInner<T extends TemplateItem<JsonItem>> = T extends TemplateItem<infer Inner> ? Inner : never;
 const List = <T extends TemplateItem<JsonItem>>(
     inner: T
@@ -254,6 +258,7 @@ export const templateItems = {
     False,
     Bool,
     Null,
+    Unknown,
     List,
     Dict,
     Union,

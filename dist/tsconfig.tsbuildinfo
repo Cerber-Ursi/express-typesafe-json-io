@@ -326,20 +326,20 @@
         "signature": "8f432f21c6621f1fd5b0776d08d07a35e1db3492522c0b57a671262cf43defb3"
       },
       "../src/template.ts": {
-        "version": "e0495028ac43d01225c427c4b5a5b3da74080ee6d721756c463709489ab99353",
-        "signature": "c049a77628220924b8d6dc0bde7d55b41d408a39ab66130d4068c1749623149a"
-      },
-      "../src/type-patches.ts": {
-        "version": "597f1fe13f6d2f1cf0980e587f92380b1cd6b49d8b0fc13a5eb8c475b5d8dcdc",
-        "signature": "c3e8a791046f47fef59dc78da324688292bc4135fc5af099ec055b4a99276e2b"
+        "version": "c0bfa95817cbf632661f9d135168f61d8b76a82784e44b9386e614b74a811199",
+        "signature": "26cf3ad3eed0192e4adf544ee3115b6d394efd685e473df1d1787db7ca5b37e6"
       },
       "../src/handler.ts": {
-        "version": "7d7c6c5009e5b8f2f63e0214eca3de20e717423dca53f3b7002097692a4c8b41",
-        "signature": "4c9af8ec1570b2381597b81edbd9f802df922977ccdc59935b3282d38f898048"
+        "version": "f586b8768375d81cb35f73e9eb9c7bf602b23c1db67a55e0eb0ff3233ceca681",
+        "signature": "138fa36564408d1d283cf6c01c03970eacc7e662524baf3c9e1bdc961b3022cf"
+      },
+      "../src/type-patches.ts": {
+        "version": "b763680b91b45079a9e1fb697e364d4b071fac708651bb0726a1d91d12f0b973",
+        "signature": "388d22fbf2980779480ddb2ecb0822a5060ce4121e8e31f20e0669e8b2355dde"
       },
       "../src/index.ts": {
-        "version": "86d881bd231a619c17ef9cd5f435157958836b7e5f125d59fd051806751c5044",
-        "signature": "01a371e197607752ebf5a6049e78f868d552fadbc18035f83e3ba43085187fd1"
+        "version": "5009d6e8acc7cc36b07e2d380395fbf0bd2812b2ab4461247db0a187599b77c5",
+        "signature": "e09d803bb5c0cf5bdc6d7f9f8fc7b847808f1acaa3d5c92a66f18992f96a1fee"
       },
       "../src/error.ts": {
         "version": "bc9e36880910ae9dc2d66fef04356a6ad54d53ca537eb38007b8aad7930267bd",
@@ -1044,20 +1044,21 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../src/type-patches.ts": [
-        "../node_modules/@types/express/index.d.ts",
-        "../src/error.ts",
-        "../src/template.ts",
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../node_modules/@types/node/util.d.ts",
-        "../node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "../src/handler.ts": [
         "../src/template.ts",
         "../src/type-patches.ts",
         "../node_modules/@types/express/index.d.ts",
         "../src/error.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "../src/type-patches.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../src/error.ts",
+        "../src/template.ts",
+        "../src/handler.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/util.d.ts",
@@ -1494,9 +1495,11 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "../src/handler.ts": [
+      "../src/type-patches.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../src/error.ts",
         "../src/template.ts",
-        "../src/type-patches.ts"
+        "../src/handler.ts"
       ],
       "../src/index.ts": [
         "../src/type-patches.ts",
@@ -1507,10 +1510,9 @@
       "../src/error.ts": [
         "../src/index.ts"
       ],
-      "../src/type-patches.ts": [
-        "../node_modules/@types/express/index.d.ts",
-        "../src/error.ts",
-        "../src/template.ts"
+      "../src/handler.ts": [
+        "../src/template.ts",
+        "../src/type-patches.ts"
       ],
       "../node_modules/@types/connect/index.d.ts": [
         "../node_modules/@types/node/http.d.ts",
@@ -2036,8 +2038,8 @@
       "../node_modules/@types/express/index.d.ts",
       "../src/set.ts",
       "../src/template.ts",
-      "../src/type-patches.ts",
       "../src/handler.ts",
+      "../src/type-patches.ts",
       "../src/index.ts",
       "../src/error.ts",
       "../node_modules/@babel/types/lib/index.d.ts",

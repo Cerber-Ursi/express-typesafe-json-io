@@ -1,4 +1,4 @@
-import { CodedError, Errors, JsonTemplateError, JsonType, Template, templateItems, TypedHandler, typesafe } from '..';
+import { CodedError, Errors, JsonTemplateError, JsonType, Template, templateItems, TypedHandler, typesafe, typesafeTransform } from '..';
 import fetch, { Response } from 'node-fetch';
 import express = require('express');
 import http = require('http');
@@ -277,10 +277,21 @@ describe('Typesafe handler', () => {
     });
 
     describe('with fixed output type', () => {
-        it('should error on the output type mismatch', () => {
+        it('should error on the output type mismatch', async () => {
             const app = express();
             app.use(express.json());
             app.post('/', typesafe({handler: (req) => req.body as unknown as number, input: Str, output: Num}));
+            app.use(errorHandler);
+            const srv = await new Promise<http.Server>((ok) => {
+                const srv = app.listen(PORT, () => ok(srv));
+            });
+            const res = await fetch(`http://localhost:${PORT}/`, {
+                method: 'POST',
+                body: JSON.stringify({'value': 0}),
+                headers: {'Content-Type': 'application/json'}
+            });
+            srv.close();
+            expect(res.status).toBe(400);
         });
     });
 });
@@ -291,5 +302,30 @@ describe('Wrapper around typed handler', () => {
         const wrapper = typesafe({handler: echoHandler<{[index: string]: {name: string; value?: string}}>(), input: template, output: template});
         expect(wrapper.input).toBe(template);
         expect(wrapper.output).toBe(template);
+    });
+});
+
+describe('Typed middleware', () => {
+    it('should correctly map specified types', async () => {
+        const input = Rec('outer', {inner: Dict(Str)});
+        const app = express();
+        app.use(express.json());
+        app.post(
+            '/',
+            typesafeTransform({handler: ({body: {inner}}) => inner, input, output: Dict(Str)}),
+            typesafe({handler: echoHandler<{[index: string]: string}>(), input: Dict(Str), output: Dict(Str)})
+        );
+        app.use(errorHandler);
+        const srv = await new Promise<http.Server>((ok) => {
+            const srv = app.listen(PORT, () => ok(srv));
+        });
+        const res = await fetch(`http://localhost:${PORT}/`, {
+            method: 'POST',
+            body: JSON.stringify({'inner': {'key': 'value'}}),
+            headers: {'Content-Type': 'application/json'}
+        });
+        srv.close();
+        expect(res.status).toBe(200);
+        await expect(res.json()).resolves.toEqual({'key': 'value'});
     });
 });

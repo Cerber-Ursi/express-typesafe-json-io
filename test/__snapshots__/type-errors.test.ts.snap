@@ -105,6 +105,15 @@ Set {
     "severity": "error",
   },
   Object {
+    "column": 11,
+    "fileName": "$ROOT/test-d/mismatch.ts",
+    "line": 38,
+    "message": "Type 'TypedHandler<string, string>' is not assignable to type 'TypedHandler<JsonItem, JsonItem>'.
+  Type 'JsonItem' is not assignable to type 'string'.
+    Type 'undefined' is not assignable to type 'string'.",
+    "severity": "error",
+  },
+  Object {
     "column": 0,
     "fileName": "$ROOT/test-d/smoke.ts",
     "line": 3,

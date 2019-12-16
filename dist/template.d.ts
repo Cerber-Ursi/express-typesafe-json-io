@@ -38,6 +38,7 @@ export declare const templateItems: {
     False: false;
     Bool: TemplateItem<boolean>;
     Null: null;
+    Unknown: TemplateItem<JsonItem>;
     List: <T extends TemplateItem<JsonItem>>(inner: T) => TemplateItem<ListInner<T>[]>;
     Dict: <Inner extends JsonItem>(inner: TemplateItemOrConst<Inner>) => TemplateItem<{
         [index: string]: Inner;
